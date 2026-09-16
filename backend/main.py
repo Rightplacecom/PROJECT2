@@ -4,7 +4,7 @@ import csv
 import re
 import sqlite3
 import uuid
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -154,6 +154,15 @@ def is_available(business_id: str, appointment_date: str, appointment_time: str,
 app = FastAPI(title="Aditya AI Voice Enterprise", version="1.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 init_db()
+
+
+@app.get("/api/health")
+def health() -> dict[str, str]:
+    return {
+        "status": "OK",
+        "message": "Your API is running",
+        "timestamp": datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z"),
+    }
 
 
 @app.get("/api/businesses")
