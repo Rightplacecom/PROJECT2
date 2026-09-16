@@ -1,0 +1,51 @@
+business_id,business_name,category,city,services
+B001,SmileCare Dental,dental,Bhopal,Dental Cleaning|Dental Checkup|Root Canal
+B002,Prime Health Clinic,healthcare,Indore,General Consultation|Follow Up
+B003,Elite Physio Center,physiotherapy,Bhopal,Physiotherapy|Sports Therapy
+B004,Glow Skin Studio,dermatology,Indore,Skin Consultation|Facial
+B005,Vision Plus,eye-care,Bhopal,Eye Checkup|Vision Test
+B006,Urban Hair Studio,salon,Bhopal,Haircut|Hair Styling
+B007,Wellness Ayurveda,wellness,Indore,Ayurveda Consultation|Therapy
+B008,FitLife Gym,fitness,Bhopal,Trainer Session|Fitness Consultation
+B009,City Dental Care,dental,Delhi,Dental Checkup|Cleaning
+B010,HealthyLife Clinic,healthcare,Mumbai,General Consultation
+B011,ProPhysio,physiotherapy,Pune,Physiotherapy|Rehabilitation
+B012,ClearView Eye Center,eye-care,Delhi,Eye Checkup|Vision Test
+B013,StylePoint Salon,salon,Mumbai,Haircut|Styling
+B014,DermaCare,dermatology,Pune,Skin Consultation
+B015,HealthFirst Clinic,healthcare,Bangalore,General Consultation
+B016,SmilePoint Dental,dental,Hyderabad,Dental Cleaning|Dental Checkup
+B017,Active Physio,physiotherapy,Chennai,Physiotherapy
+B018,Beauty Lounge,salon,Bangalore,Haircut|Hair Styling
+B019,VisionCare,eye-care,Hyderabad,Eye Checkup
+B020,Wellness Center,wellness,Delhi,Wellness Consultation
+B021,Prime Dental,dental,Pune,Dental Checkup
+B022,City Physio,physiotherapy,Mumbai,Physiotherapy
+B023,Glow Dermatology,dermatology,Delhi,Skin Consultation
+B024,Urban Fitness,fitness,Bangalore,Trainer Session
+B025,Family Health Clinic,healthcare,Bhopal,General Consultation
+B026,Perfect Smile,dental,Indore,Dental Cleaning
+B027,MoveWell Physio,physiotherapy,Delhi,Physiotherapy
+B028,EyeVision Center,eye-care,Mumbai,Eye Checkup
+B029,StyleHub Salon,salon,Pune,Haircut|Styling
+B030,DermaPlus,dermatology,Bangalore,Skin Consultation
+B031,Healthy Steps,healthcare,Chennai,General Consultation
+B032,DentalPro,dental,Chennai,Dental Checkup|Cleaning
+B033,PhysioWorks,physiotherapy,Hyderabad,Physiotherapy
+B034,BeautyWorks,salon,Delhi,Hair Styling
+B035,ClearSkin Clinic,dermatology,Mumbai,Skin Consultation
+B036,FitZone,fitness,Pune,Trainer Session
+B037,VisionCare Plus,eye-care,Bangalore,Eye Checkup
+B038,AyurLife,wellness,Bhopal,Ayurveda Consultation
+B039,PrimeCare Clinic,healthcare,Indore,General Consultation
+B040,DentalSquare,dental,Mumbai,Dental Cleaning
+B041,PhysioHealth,physiotherapy,Bangalore,Physiotherapy
+B042,GlowUp Salon,salon,Chennai,Haircut|Styling
+B043,EyeCare Plus,eye-care,Pune,Eye Checkup
+B044,DermaHealth,dermatology,Hyderabad,Skin Consultation
+B045,WellFit,fitness,Delhi,Trainer Session
+B046,AyurWell,wellness,Mumbai,Ayurveda Consultation
+B047,Family Dental,dental,Bangalore,Dental Checkup
+B048,ActiveHealth,healthcare,Hyderabad,General Consultation
+B049,ProSkin,dermatology,Bhopal,Skin Consultation
+B050,Complete Wellness,wellness,Pune,Wellness Consultation

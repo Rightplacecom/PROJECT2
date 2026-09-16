@@ -1,0 +1,29 @@
+const API="";
+let businesses=[],selectedBusiness="";
+const $=id=>document.getElementById(id);
+async function get(path){const response=await fetch(API+path);if(!response.ok)throw new Error(await response.text());return response.json()}
+function showToast(text){const toast=$("toast");toast.textContent=text;toast.style.display="block";setTimeout(()=>toast.style.display="none",3000)}
+async function init(){
+  businesses=await get("/api/businesses");selectedBusiness=businesses[0].business_id;
+  $("business-count").textContent=`${businesses.length} TOTAL`;
+  $("business-select").innerHTML=businesses.map(b=>`<option value="${b.business_id}">${b.business_name}</option>`).join("");
+  $("date-picker").value=new Date().toISOString().slice(0,10);
+  renderBusinesses();selectBusiness(selectedBusiness);loadAppointments();loadMetrics();loadSlots();
+}
+function renderBusinesses(filter=""){const list=businesses.filter(b=>b.business_name.toLowerCase().includes(filter.toLowerCase()));$("business-list").innerHTML=list.map(b=>`<div class="business-item ${b.business_id===selectedBusiness?"selected":""}" onclick="selectBusiness('${b.business_id}')"><strong>${b.business_name}</strong><span>${b.category} · ${b.city}</span></div>`).join("")}
+function selectBusiness(id){selectedBusiness=id;$("business-select").value=id;const b=businesses.find(item=>item.business_id===id);$("agent-context").textContent=`${b.business_name} · ${b.city} · ${b.services.join(", ")}`;renderBusinesses($("business-search").value);loadSlots();loadAppointments();loadMetrics()}
+async function loadSlots(){if(!selectedBusiness)return;const slots=await get(`/api/availability?business_id=${selectedBusiness}&appointment_date=${$("date-picker").value}`);$("slots").innerHTML=slots.map(s=>`<div class="slot ${s.available?"":"booked"}">${s.time}<br><small>${s.available?"Available":"Booked"}</small></div>`).join("")}
+async function loadAppointments(){const rows=await get(`/api/appointments?business_id=${selectedBusiness}`);$("appointments").innerHTML=rows.slice(-7).reverse().map(a=>`<div class="appointment"><div><strong>${a.appointment_time} · ${a.customer_name}</strong><small>${a.service} · ${a.appointment_date}</small></div><span class="badge">${a.status}</span></div>`).join("")||"<p class='panel-heading'>No appointments yet.</p>"}
+async function loadMetrics(){const rows=await get("/api/appointments");const booked=rows.filter(a=>a.status==="BOOKED").length,cancelled=rows.filter(a=>a.status==="CANCELLED").length;$("metrics").innerHTML=[["TODAY'S APPOINTMENTS",rows.filter(a=>a.appointment_date===new Date().toISOString().slice(0,10)).length,"LIVE DATA"],["AVAILABLE SLOTS",SLOTS_COUNT(rows),"ACROSS BUSINESS"],["BOOKED",booked,"ACTIVE"],["CANCELLED",cancelled,"THIS DEMO"]].map(x=>`<div class="metric"><span class="metric-label">${x[0]}</span><strong>${x[1]}</strong><small>● ${x[2]}</small></div>`).join("")}
+function SLOTS_COUNT(rows){return businesses.length*12-rows.filter(a=>a.status==="BOOKED").length}
+function addMessage(text,type){$("chat").insertAdjacentHTML("beforeend",`<div class="message ${type}"><span class="avatar">${type==="user"?"◌":"✦"}</span><div><small>${type==="user"?"YOU":"ADITYA AI"}</small><p>${text}</p></div></div>`);$("chat").scrollTop=$("chat").scrollHeight}
+async function sendMessage(text){if(!text.trim())return;addMessage(text,"user");$("message-input").value="";try{const result=await fetch("/api/agent/message",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business_id:selectedBusiness,message:text,session_id:"demo"})}).then(r=>r.json());addMessage(result.response,"ai");if(result.requires_confirmation){const e=result.entities;const b=businesses.find(x=>x.business_id===selectedBusiness);$("chat").insertAdjacentHTML("beforeend",`<div class="message ai"><span class="avatar">✦</span><div><small>CONFIRM DETAILS</small><p>${b.business_name}<br>${e.service} · ${e.date} · ${e.time}<br><button class="button button-primary" style="margin-top:8px;padding:8px 12px" onclick="confirmBooking('${e.service}','${e.date}','${e.time}')">Confirm appointment</button></p></div></div>`)}}catch(error){addMessage("I couldn't reach the scheduling engine. Please try again.","ai")}}
+async function confirmBooking(service,appointment_date,appointment_time){const name=prompt("Customer name","Rahul");if(!name)return;const response=await fetch("/api/appointments",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({business_id:selectedBusiness,customer_name:name,service,appointment_date,appointment_time})});if(!response.ok){showToast("That slot is no longer available");return}const appointment=await response.json();addMessage(`Appointment confirmed. Your ID is ${appointment.appointment_id}. See you on ${appointment.appointment_date} at ${appointment.appointment_time}.`,"ai");showToast("Appointment booked successfully");loadAppointments();loadSlots();loadMetrics()}
+function quickMessage(text){sendMessage(text)}
+$("chat-form").addEventListener("submit",event=>{event.preventDefault();sendMessage($("message-input").value)});
+$("business-select").addEventListener("change",event=>selectBusiness(event.target.value));
+$("business-search").addEventListener("input",event=>renderBusinesses(event.target.value));
+$("date-picker").addEventListener("change",loadSlots);
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SpeechRecognition){$("mic-button").addEventListener("click",()=>{const recognition=new SpeechRecognition();recognition.lang="en-US";$("mic-button").textContent="…";recognition.onresult=e=>{$("message-input").value=e.results[0][0].transcript;sendMessage($("message-input").value)};recognition.onerror=()=>showToast("Microphone access was unavailable");recognition.onend=()=>$("mic-button").textContent="●";recognition.start()})}else $("mic-button").disabled=true;
+init().catch(()=>showToast("Start the FastAPI server to load the demo"));
